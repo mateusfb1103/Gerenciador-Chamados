@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: pg_chamados
+    environment:
+      POSTGRES_USER: "mateus"
+      POSTGRES_PASSWORD: "mateus123"
+      POSTGRES_DB: "chamadosdb"
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  api:
+    build: .
+    container_name: api_chamados
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/chamadosdb"
+      SPRING_DATASOURCE_USERNAME: "mateus"
+      SPRING_DATASOURCE_PASSWORD: "mateus123"
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+
+volumes:
+  pgdata:
+
+networks:
+  backend:
