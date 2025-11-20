@@ -44,30 +44,26 @@ public class AuthService {
             throw new RuntimeException("Email já cadastrado");
         }
 
-        User user = User.builder()
-                .nome(request.getNome())
-                .email(request.getEmail())
-                .senha(passwordEncoder.encode(request.getSenha()))
-                .role(Role.ROLE_USER)
-                .build();
+        // Define ROLE_USER como padrão
+        Role role = Role.ROLE_USER;
 
-        userRepository.save(user);
-
-        String token = jwtService.generateToken(user);
-        return new AuthResponse(token);
-    }
-
-    public AuthResponse registerSupport(RegisterRequest request) {
-
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Email já cadastrado");
+        // Se a role foi informada na requisição, tenta usar ela
+        if (request.getRole() != null && !request.getRole().isBlank()) {
+            try {
+                // Tenta converter a String (ex: "ROLE_SUPPORT") para o Enum
+                role = Role.valueOf(request.getRole());
+            } catch (IllegalArgumentException e) {
+                // Se a role enviada não existir no Enum, mantém o padrão ROLE_USER
+                // ou você poderia lançar uma exceção aqui se preferisse ser rígido
+                role = Role.ROLE_USER;
+            }
         }
 
         User user = User.builder()
                 .nome(request.getNome())
                 .email(request.getEmail())
                 .senha(passwordEncoder.encode(request.getSenha()))
-                .role(Role.ROLE_SUPPORT)
+                .role(role) // Usa a role determinada acima
                 .build();
 
         userRepository.save(user);

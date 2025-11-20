@@ -43,4 +43,9 @@ public class ChamadoController {
         chamadoService.deletarChamado(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping
+    public ResponseEntity<List<ChamadoResponseDTO>> listarTodos() {
+        return ResponseEntity.ok(chamadoService.listarTodos());
+    }
 }

@@ -79,4 +79,11 @@ public class ChamadoService {
                 .atualizadoEm(chamado.getAtualizadoEm())
                 .build();
     }
+
+    public List<ChamadoResponseDTO> listarTodos() {
+        return chamadoRepository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .toList();
+    }
 }

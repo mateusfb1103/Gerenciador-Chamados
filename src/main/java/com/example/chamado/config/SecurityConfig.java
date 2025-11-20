@@ -25,20 +25,27 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {})
+                .cors(org.springframework.security.config.Customizer.withDefaults()) // Usa sua config de CORS
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
 
-                        // Rotas específicas de suporte (ROLE_SUPPORT)
-                        .requestMatchers("/suporte/**").hasRole("SUPPORT")
+                        // --- REGRAS DE CHAMADOS ---
+                        // Listar TODOS os chamados: Apenas Suporte
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/chamados").hasRole("SUPPORT")
 
-                        // Rotas de usuário final (ROLE_USER ou ROLE_SUPPORT)
-                        .requestMatchers("/usuario/**").hasAnyRole("USER", "SUPPORT")
+                        // Listar chamados DO USUÁRIO: Ambos podem (o suporte pode querer ver o de um user específico)
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/chamados/{userId}").hasAnyRole("USER", "SUPPORT")
 
-                        // Qualquer outra precisa apenas estar autenticado
+                        // Criar chamado: Ambos podem (geralmente suporte também abre chamado interno)
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/chamados/**").hasAnyRole("USER", "SUPPORT")
+
+                        // Editar e Deletar: APENAS SUPORTE
+                        .requestMatchers(org.springframework.http.HttpMethod.PUT, "/chamados/**").hasRole("SUPPORT")
+                        .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/chamados/**").hasRole("SUPPORT")
+
+                        // Qualquer outra rota exige autenticação
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex
