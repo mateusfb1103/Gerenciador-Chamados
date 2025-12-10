@@ -26,12 +26,6 @@ Para rodar este projeto, você precisará de:
 O projeto está configurado para conectar em um banco PostgreSQL local ou via Docker na porta `5432`.
 As credenciais padrões estão em `src/main/resources/application.properties`:
 
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/chamadosdb
-spring.datasource.username=mateus
-spring.datasource.password=mateus123
-```
-
 ### CORS (Importante para o Frontend)
 Para que o frontend funcione, certifique-se de que a origem permitida em src/main/java/com/example/chamado/config/CorsConfig.java corresponde à URL do seu frontend (ex: http://127.0.0.1:5500).
 
