@@ -43,7 +43,7 @@ public class ChamadoService {
     }
 
     public List<ChamadoResponseDTO> listarChamadosDoUsuario(Long userId) {
-        return chamadoRepository.findByUsuarioId(userId)
+        return chamadoRepository.findByUsuarioIdOrderByCriadoEmAsc(userId)
                 .stream().map(this::toDTO).toList();
     }
 
@@ -65,9 +65,8 @@ public class ChamadoService {
     }
 
     public void deletarChamado(Long id) {
-        if (!chamadoRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Chamado não encontrado com o id: " + id);
-        }
+        chamadoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Chamado não encontrado com o id: " + id));
         chamadoRepository.deleteById(id);
     }
 
