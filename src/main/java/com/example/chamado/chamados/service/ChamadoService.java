@@ -6,6 +6,7 @@ import com.example.chamado.chamados.dto.ChamadoUpdateDTO;
 import com.example.chamado.chamados.model.Chamado;
 import com.example.chamado.chamados.model.ChamadoStatus;
 import com.example.chamado.chamados.repository.ChamadoRepository;
+import com.example.chamado.exception.ResourceNotFoundException;
 import com.example.chamado.user.model.User;
 import com.example.chamado.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -64,6 +65,9 @@ public class ChamadoService {
     }
 
     public void deletarChamado(Long id) {
+        if (!chamadoRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Chamado não encontrado com o id: " + id);
+        }
         chamadoRepository.deleteById(id);
     }
 

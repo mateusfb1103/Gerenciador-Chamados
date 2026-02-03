@@ -35,7 +35,7 @@ class UserServiceTest {
     @Test
     @DisplayName("Deve criar usuário com sucesso")
     void criarUsuarioSucesso() {
-        // Cenário (Arrange)
+        // Cenário
         UserCreateDTO dto = new UserCreateDTO();
         dto.setNome("Teste Silva");
         dto.setEmail("teste@email.com");

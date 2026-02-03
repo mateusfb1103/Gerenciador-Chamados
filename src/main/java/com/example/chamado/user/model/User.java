@@ -25,5 +25,5 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role; // ROLE_USER ou ROLE_SUPPORT
+    private Role role;
 }

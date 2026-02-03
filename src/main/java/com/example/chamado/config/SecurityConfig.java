@@ -31,7 +31,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
 
-                        // --- REGRAS DE CHAMADOS ---
                         // Listar TODOS os chamados: Apenas Suporte
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/chamados").hasRole("SUPPORT")
 

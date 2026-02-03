@@ -54,7 +54,6 @@ public class AuthService {
                 role = Role.valueOf(request.getRole());
             } catch (IllegalArgumentException e) {
                 // Se a role enviada não existir no Enum, mantém o padrão ROLE_USER
-                // ou você poderia lançar uma exceção aqui se preferisse ser rígido
                 role = Role.ROLE_USER;
             }
         }
@@ -63,7 +62,7 @@ public class AuthService {
                 .nome(request.getNome())
                 .email(request.getEmail())
                 .senha(passwordEncoder.encode(request.getSenha()))
-                .role(role) // Usa a role determinada acima
+                .role(role) // Usa a role determinada
                 .build();
 
         userRepository.save(user);
